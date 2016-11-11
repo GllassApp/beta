@@ -1,0 +1,20 @@
+festival,people,wear,woman,group,celebration,fun,outdoors,child,happiness,traditional,culture,daylight,girl,adult,costume,parade,religion,man,facial expression,1471910400000,140
+people,woman,adult,child,outdoors,man,two,one,portrait,group,girl,recreation,daylight,wear,boy,park,lid,home,family,leisure,1471564800000,126
+child,family,togetherness,people,affection,outdoors,facial expression,two,woman,happiness,offspring,boy,love,enjoyment,embrace,portrait,daylight,leisure,three,interaction,1471392000000,118
+people,competition,festival,adult,woman,soccer,portrait,wear,football,man,rally,street,sports fan,music,strange,celebration,gloves,child,road,pride,1471046400000,112
+people,woman,two,portrait,adult,man,wear,brunette,facial expression,girl,outdoors,affection,love,happiness,pants,daylight,recreation,togetherness,couple,lid,1470614400000,128
+actress,recreation,movie,people,editorial,festival,red carpet,actor,portrait,music,ceremony,group,singer,television,wear,musician,adult,room,exhibition,performance,1470268800000,97
+people,child,sport,exercise,fun,motion,recreation,active,street,family,school,marathon,outdoors,man,city,festival,boy,woman,fitness,lifestyle,1467936000000,93
+nature,outdoors,summer,child,girl,park,happiness,leisure,travel,people,fun,two,grass,vacation,adventure,lifestyle,daylight,woman,landscape,family,1467072000000,121
+indoors,education,adult,people,business,man,election,school,woman,industry,group,room,two,office,technology,commerce,ballot,teacher,finance,writing,1464998400000,123
+groom,ceremony,outdoors,veil,two,wedding,dinner jacket,people,recreation,woman,love,man,wear,bride,portrait,adult,facial expression,dress,romance,togetherness,1464739200000,152
+woman,dinner jacket,portrait,people,two,wear,outdoors,romance,togetherness,facial expression,love,man,groom,wedding,happiness,ceremony,affection,adult,recreation,enjoyment,1464739200000,171
+child,togetherness,family,boy,facial expression,people,offspring,two,indoors,affection,innocence,interaction,sibling,portrait,education,youth,happiness,love,woman,three,1464220800000,110
+togetherness,outdoors,family,man,education,child,people,woman,administration,friendship,adult,love,affection,enjoyment,facial expression,university,school,happiness,home,portrait,1463356800000,107
+child,people,girl,one,portrait,fun,car,woman,vehicle,two,outdoors,cute,indoors,baby,family,adult,love,little,travel,happiness,1462838400000,91
+people,education,woman,adult,business,school,administration,man,election,indoors,finance,teacher,technology,industry,rally,commerce,parliament,portrait,room,coffee,1460937600000,124
+woman,man,people,portrait,family,adult,two,indoors,couple,facial expression,group,wear,movie,happiness,togetherness,room,stock,business,brunette,interaction,1459036800000,94
+portrait,people,adult,man,wear,competition,group,woman,two,facial expression,military,award,leader,healthcare,uniform,administration,outerwear,jacket,indoors,outfit,1458950400000,90
+competition,woman,portrait,people,man,recreation,wear,festival,education,music,group,child,performance,adult,school,fashion,exhibition,group,many,footwear,1456704000000,97
+people,woman,man,sunglasses,group,portrait,adult,brunette,fun,girl,music,competition,couple,lid,family,love,togetherness,young,wear,flag,1456358400000,90
+group,woman,three,facial expression,adult,togetherness,man,four,offspring,family,people,happiness,interaction,child,portrait,boy,indoors,affection,wear,room,1454976000000,92

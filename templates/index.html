@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Predictagram</title>
+  </head>
+
+  <body>
+    <center>
+      <h3><a href="https://api.instagram.com/oauth/authorize/?client_id=2d6c7f1263964daea8879311abf028ec&redirect_uri=http://b1a16074.ngrok.io&response_type=token">Click here to analyze your Instagram account</a></h3>
+    </center>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+    if (window.location.hash) {
+      // Get the hash
+      hash = window.location.hash;
+
+      // Get the access token
+      hashParts = hash.split('=');
+      token = hashParts[1];
+
+      // Get the user
+      tokenParts = token.split('.');
+      user_id = tokenParts[0];
+
+      // Send access token to server
+      $.ajax({
+        type: 'POST',
+        complete: function (data) {
+          window.location.assign('/upload');
+        },
+        contentType: 'application/json; charset=utf-8',
+        url: '/register-account',
+        data: JSON.stringify({token: token, user_id: user_id}),
+        dataType: 'json'
+      });
+    }
+    </script>
+  </body>
+</html>

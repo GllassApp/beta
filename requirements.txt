@@ -1,0 +1,6 @@
+Flask
+flask-cors
+numpy
+scikit-learn
+git+git://github.com/Clarifai/clarifai-python.git
+python-instagram

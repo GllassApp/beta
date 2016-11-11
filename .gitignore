@@ -1,0 +1,5 @@
+*.py[oc]
+config.py
+.DS_STORE
+glove/
+images/
