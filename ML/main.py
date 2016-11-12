@@ -130,7 +130,7 @@ def tags():
         tag = reverse_tag_indices[index]
         top_ten_tags.append([tag, importance])
 
-    return make_response(json.dumps({'recurring': recurring, 'topTags': top_ten_tags}), 200)
+    return make_response(json.dumps({'recurring': recurring}), 200)
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
