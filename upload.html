@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="myChart"></canvas>
     <form id="upload-file" method="post" enctype="multipart/form-data">
         <fieldset>
             <label for="file">Select a file</label>
@@ -22,6 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script type="text/javascript" src="node_modules/chart.js/dist/Chart.js"></script>
+    <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
     <script>
     function sortFunction(a, b) {
         if (a[1] === b[1]) {
@@ -32,7 +33,6 @@
     }
 
     $.getJSON('http://53f6a570.ngrok.io/tags', function(data) {
-        console.log(data.recurring)
         array_elements = [].concat.apply([], data.recurring);
         array_elements.sort();
         var current = null;
@@ -45,6 +45,7 @@
         for (var i = 0; i < array_elements.length; i++) {
             if (array_elements[i] != current) {
                 if (cnt > 0) {
+                	recurse.push([current, cnt])
                     labels.push(current);
                     datas.push(cnt)
                     backgroundcolors.push('rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', .4)');
@@ -59,16 +60,18 @@
         if (cnt > 0) {
             datas.push(cnt);
             labels.push(current);
+            recurse.push([current, cnt])
         }
         recurse = recurse.sort(sortFunction).reverse();
+        recurse = _.unzip(recurse);
         var data = {
-            labels: labels,
+            labels: recurse[0].reverse(),
             datasets: [{
-                label: "Most recurring tags",
+                label: "Most popular tags",
                 backgroundColor: bordercolors,
                 borderColor: backgroundcolors,
                 borderWidth: 1,
-                data: datas,
+                data: recurse[1].reverse(),
                 options: null
             }]
         };
