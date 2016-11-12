@@ -21,7 +21,7 @@ os.environ['CLARIFAI_APP_SECRET'] = CLARIFAI_APP_SECRET
 clarifai_api = ClarifaiApi()
 
 model = None
-
+recurring = []
 tag_indices = {}
 current_index = 0
 
@@ -65,10 +65,13 @@ def register_account():
     num_likes = []
     dates = []
 
+    global recurring
+
     # Convert all images to vectors
     for media in recent_media:
         img_data = clarifai_api.tag_image_urls(media.images['standard_resolution'].url)
         tags.append(img_data['results'][0]['result']['tag']['classes'])
+        recurring.append(img_data['results'][0]['result']['tag']['classes'])
         date = int(media.created_time.strftime("%s")) * 1000
         dates.append(date)
         num_likes.append(media.like_count)
@@ -101,9 +104,14 @@ def register_account():
 
     global model
     model = LikePredictor(data)
-
+    print recurring
     return 'Done'
 
+@app.route('/tags')
+def tags():
+    global recurring
+    print recurring
+    return make_response(json.dumps({'recurring': recurring}), 200)
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
