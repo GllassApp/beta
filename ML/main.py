@@ -8,6 +8,7 @@ import json
 from instagram.client import InstagramAPI
 import requests
 import datetime
+from collections import Counter
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
