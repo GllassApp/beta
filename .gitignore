@@ -1,5 +1,5 @@
 *.py[oc]
-config.py
+ML/config.py
 .DS_STORE
-glove/
-images/
+ML/glove/
+ML/images/
