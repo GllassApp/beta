@@ -35,6 +35,7 @@
         }*/
 
         var form_data = new FormData($('#upload-file')[0]);
+        $('#prediction').text('Calculating...');
         $.ajax({
           type: 'POST',
           url: 'http://53f6a570.ngrok.io/process-image',

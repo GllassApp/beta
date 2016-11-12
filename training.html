@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gllass | Training</title>
+</head>
+
+<body>
+    <h1>Please wait while our computer trains on your data. This may take a few minutes.</h1>
+    <script type="text/javascript">
+    if (window.location.hash) {
+        // Get the hash
+        alert("Training... please wait");
+        hash = window.location.hash;
+        // Get the access token
+        hashParts = hash.split('=');
+        token = hashParts[1];
+        // Get the user
+        tokenParts = token.split('.');
+        user_id = tokenParts[0];
+        // Send access token to server
+        $.ajax({
+            type: 'POST',
+            complete: function(data) {
+                window.location = "upload.html"
+            },
+            contentType: 'application/json; charset=utf-8',
+            url: 'http://53f6a570.ngrok.io/register-account',
+            data: JSON.stringify({
+                token: token,
+                user_id: user_id
+            }),
+            dataType: 'json'
+        });
+    }
+    </script>
+</body>
+
+</html>
