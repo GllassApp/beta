@@ -7,7 +7,8 @@
 </head>
 
 <body>
-    <canvas id="myChart"></canvas>
+    <canvas id="recurrent"></canvas>
+    <canvas id="popular"></canvas>
     <form id="upload-file" method="post" enctype="multipart/form-data">
         <fieldset>
             <label for="file">Select a file</label>
@@ -33,7 +34,32 @@
     }
 
     $.getJSON('http://53f6a570.ngrok.io/tags', function(data) {
+
+        bcolors = [];
+        bgcolors = [];
+        for (var a = 0; a <= 8; a++) {
+            bcolors.push('rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', .4)');
+            bgcolors.push('rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', .4)');
+        }
+        var topten = _.unzip(data.topten);
+        var topdata = {
+            labels: topten[0],
+            datasets: [{
+                label: "Most popular tags",
+                backgroundColor: bcolors,
+                borderColor: bgcolors,
+                borderWidth: 1,
+                data: topten[1],
+                options: null
+            }]
+        };
+        var ctx2 = $("#popular");
+        var popular = new Chart(ctx2, {
+            type: 'bar',
+            data: topdata
+        });
         array_elements = [].concat.apply([], data.recurring);
+        ae = data;
         array_elements.sort();
         var current = null;
         var cnt = 0;
@@ -45,7 +71,7 @@
         for (var i = 0; i < array_elements.length; i++) {
             if (array_elements[i] != current) {
                 if (cnt > 0) {
-                	recurse.push([current, cnt])
+                    recurse.push([current, cnt])
                     labels.push(current);
                     datas.push(cnt)
                     backgroundcolors.push('rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', .4)');
@@ -75,8 +101,8 @@
                 options: null
             }]
         };
-        var ctx = $("#myChart");
-        var myBarChart = new Chart(ctx, {
+        var ctx = $("#recurrent");
+        var recurrent = new Chart(ctx, {
             type: 'bar',
             data: data
         });
