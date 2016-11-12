@@ -120,6 +120,7 @@ def tags():
     global recurring
     global model
     global reverse_tag_indices
+    global current_index
 
     # Compute most important tags in user's pictures
     important_tags = dict(enumerate(model.regressor.feature_importances_))
@@ -127,8 +128,10 @@ def tags():
     top_ten_tags = []
 
     for index, importance in sorted_tags.most_common(10):
-        tag = reverse_tag_indices[index]
-        top_ten_tags.append([tag, importance])
+        # Ensure feature is an image tag
+        if index < current_index:
+            tag = reverse_tag_indices[index]
+            top_ten_tags.append([tag, importance])
 
     return make_response(json.dumps({'recurring': recurring}), 200)
 
