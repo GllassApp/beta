@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestRegressor
 import datetime
 
@@ -22,5 +21,7 @@ class LikePredictor():
         self.regressor.fit(X, y)
 
     def predict(self, img_vector):
-        input_vector = np.hstack(([img_vector], [[int(datetime.datetime.now().strftime("%s")) * 1000]]))
+        now = datetime.datetime.now()
+        input_vector = np.hstack(([img_vector], [[int(now.strftime("%s")) * 1000]]))
+        input_vector = np.hstack((input_vector, [[now.hour]]))
         return self.regressor.predict(input_vector)[0]

@@ -23,18 +23,20 @@ clarifai_api = ClarifaiApi()
 model = None
 recurring = []
 tag_indices = {}
+reverse_tag_indices = []
 current_index = 0
 
 # Convert image to vector
 def image_vector(img_file):
     img_data = clarifai_api.tag_images(img_file)
     tags = img_data['results'][0]['result']['tag']['classes']
+    weights = img_data['results'][0]['result']['tag']['probs']
 
     vector = [0] * current_index
 
-    for tag in tags:
-        if tag in tag_indices:
-            vector[tag_indices[tag]] = 1
+    for i in range(len(tags)):
+        if tags[i] in tag_indices:
+            vector[tag_indices[tags[i]]] = weights[i]
 
     return vector
 
@@ -64,6 +66,8 @@ def register_account():
     tags = []
     num_likes = []
     dates = []
+    time_of_day = []
+    weights = []
 
     global recurring
 
@@ -71,9 +75,11 @@ def register_account():
     for media in recent_media:
         img_data = clarifai_api.tag_image_urls(media.images['standard_resolution'].url)
         tags.append(img_data['results'][0]['result']['tag']['classes'])
+        weights.append(img_data['results'][0]['result']['tag']['probs'])
         recurring.append(img_data['results'][0]['result']['tag']['classes'])
         date = int(media.created_time.strftime("%s")) * 1000
         dates.append(date)
+        time_of_day.append(media.created_time.hour)
         num_likes.append(media.like_count)
 
     # Dictionary to store indices of tags
@@ -85,33 +91,45 @@ def register_account():
         for tag in vector:
             if tag not in tag_indices:
                 tag_indices[tag] = current_index
+                reverse_tag_indices.append(tag)
                 current_index += 1
 
     data = []
 
-    # Generate vectors for each image by marking tags as present
+    # Generate vectors for each image by marking each tag with weight
     for i in range(len(tags)):
         vector = [0] * current_index
 
-        for tag in tags[i]:
-            vector[tag_indices[tag]] = 1
+        for j in range(len(tags[i])):
+            vector[tag_indices[tags[i][j]]] = weights[i][j]
 
-        # Append date number of likes to end of vector
+        # Append extra variables and number of likes
         vector.append(dates[i])
+        vector.append(time_of_day[i])
         vector.append(num_likes[i])
 
         data.append(vector)
 
     global model
     model = LikePredictor(data)
-    print recurring
     return 'Done'
 
 @app.route('/tags')
 def tags():
     global recurring
-    print recurring
-    return make_response(json.dumps({'recurring': recurring}), 200)
+    global model
+    global reverse_tag_indices
+
+    # Compute most important tags in user's pictures
+    important_tags = dict(enumerate(model.regressor.feature_importances_))
+    sorted_tags = Counter(important_tags)
+    top_ten_tags = []
+
+    for index, importance in sorted_tags.most_common(10):
+        tag = reverse_tag_indices[index]
+        top_ten_tags.append([tag, importance])
+
+    return make_response(json.dumps({'recurring': recurring, 'topTags': top_ten_tags}), 200)
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
@@ -126,7 +144,5 @@ def process_image():
     response.headers['Content-Type'] = 'application/json'
     return response
 
-
 if __name__ == '__main__':
     app.run(debug=True)
-
