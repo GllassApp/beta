@@ -11,26 +11,26 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script type="text/javascript">
     hash = window.location.hash;
-        // Get the access token
-        hashParts = hash.split('=');
-        token = hashParts[1];
-        // Get the user
-        tokenParts = token.split('.');
-        user_id = tokenParts[0];
-        // Send access token to server
-        $.ajax({
-            type: 'POST',
-            complete: function(data) {
-                window.location = "upload.html"
-            },
-            contentType: 'application/json; charset=utf-8',
-            url: 'http://53f6a570.ngrok.io/register-account',
-            data: JSON.stringify({
-                token: token,
-                user_id: user_id
-            }),
-            dataType: 'json'
-        });
+    // Get the access token
+    hashParts = hash.split('=');
+    token = hashParts[1];
+    // Get the user
+    tokenParts = token.split('.');
+    user_id = tokenParts[0];
+    // Send access token to server
+    $.ajax({
+        type: 'POST',
+        complete: function(data) {
+            window.location = "upload.html"
+        },
+        contentType: 'application/json; charset=utf-8',
+        url: 'http://53f6a570.ngrok.io/register-account',
+        data: JSON.stringify({
+            token: token,
+            user_id: user_id
+        }),
+        dataType: 'json'
+    });
     </script>
 </body>
 
