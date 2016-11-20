@@ -26,6 +26,7 @@ recurring = []
 tag_indices = {}
 reverse_tag_indices = []
 current_index = 0
+pictures = []
 
 # Convert image to vector
 def image_vector(img_file):
