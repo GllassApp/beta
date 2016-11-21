@@ -1,0 +1,54 @@
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Black.otf);
+	font-family: 'Black';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Bold.otf);
+	font-family: 'Bold';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Heavy.otf);
+	font-family: 'Heavy';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Light.otf);
+	font-family: 'Light';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Medium.otf);
+	font-family: 'Medium';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Regular.otf);
+	font-family: 'Regular';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Thin.otf);
+	font-family: 'Thin';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Ultralight.otf);
+	font-family: 'Ultralight';
+}
+
+@font-face
+{
+	src: url(../font/SanFranciscoDisplay-Semibold.otf);
+	font-family: 'Semibold';
+}
+
