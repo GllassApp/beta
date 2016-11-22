@@ -72,7 +72,7 @@ def register_account():
     weights = []
 
     global recurring
-
+    global pictures
     # Convert all images to vectors
     for media in recent_media:
         img_data = clarifai_api.tag_image_urls(media.images['standard_resolution'].url)
@@ -83,7 +83,7 @@ def register_account():
         dates.append(date)
         time_of_day.append(media.created_time.hour)
         num_likes.append(media.like_count)
-
+        pictures.append([media.images['standard_resolution'].url, img_data['results'][0]['result']['tag']['classes']])
     # Dictionary to store indices of tags
     global tag_indices
     # Iterator for indices
@@ -122,7 +122,7 @@ def tags():
     global model
     global reverse_tag_indices
     global current_index
-
+    global pictures
     # Compute most important tags in user's pictures
     important_tags = dict(enumerate(model.regressor.feature_importances_))
     sorted_tags = Counter(important_tags)
@@ -134,7 +134,7 @@ def tags():
             tag = reverse_tag_indices[index]
             top_ten_tags.append([tag, importance])
 
-    return make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags}), 200)
+    return make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags, 'pictures': pictures}), 200)
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
