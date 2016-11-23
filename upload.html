@@ -25,29 +25,35 @@
         <li class="tab col s3"><a href="#test3" class="white-text">Predictor</a></li>
     </ul>
     <div id="test1" class="col s12" align="center">
-        <canvas id="popular"></canvas>
-        <h5>These are the elements of your pictures that generate the most attention and get you the most likes</h5>
-        <div class="row" id="poppics" align="left"></div>
+        <div class="container">
+            <canvas id="popular"></canvas>
+            <h5>These are the elements of your pictures that generate the most attention and get you the most likes</h5>
+            <div class="row" id="poppics" align="left"></div>
+        </div>
     </div>
     <div id="test2" class="col s12" align="center">
-        <canvas id="recurrent"></canvas>
-        <h5>These are the elements of your pictures that are the most common</h5>
-        <div class="row" id="recpics" align="left"></div>
+        <div class="container">
+            <canvas id="recurrent"></canvas>
+            <h5>These are the elements of your pictures that are the most common</h5>
+            <div class="row" id="recpics" align="left"></div>
+        </div>
     </div>
     <div id="test3" class="col s12" align="center">
-        <form id="upload-file" method="post" enctype="multipart/form-data">
-            <h3 class="fonttest" font="Regular">Upload a picture here to predict how many likes it will get!</h3>
-            <fieldset>
-                <label for="file">Select a file</label>
-                <input name="image" class="" type="file" value="">
-            </fieldset>
-            <fieldset>
-                <button class="btn waves-effect waves-light black" name="action" id="upload-file-btn" onclick="alert('Predicting');predict()" type="button">Submit
-                    <i class="fa fa-telegram"></i>
-                </button>
-            </fieldset>
-            <h4 class="fonttest" font="Regular" id="prediction"></h4>
-        </form>
+        <div class="container">
+            <form id="upload-file" method="post" enctype="multipart/form-data">
+                <h3 class="fonttest" font="Regular">Upload a picture here to predict how many likes it will get!</h3>
+                <fieldset>
+                    <label for="file">Select a file</label>
+                    <input name="image" class="" type="file" value="">
+                </fieldset>
+                <fieldset>
+                    <button class="btn waves-effect waves-light black" name="action" id="upload-file-btn" onclick="alert('Predicting');predict()" type="button">Submit
+                        <i class="fa fa-telegram"></i>
+                    </button>
+                </fieldset>
+                <h4 class="fonttest" font="Regular" id="prediction"></h4>
+            </form>
+        </div>
     </div>
     <!-- <p>Date: <input id="datepicker"></p> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
