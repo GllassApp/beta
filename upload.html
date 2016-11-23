@@ -33,6 +33,7 @@
     </div>
     <div id="test2" class="col s12">
         <canvas id="recurrent"></canvas>
+        <div class="row" id="recpics"></div>
     </div>
     <div id="test3" class="col s12">
         <form id="upload-file" method="post" enctype="multipart/form-data">
@@ -96,11 +97,13 @@
             data: topdata
         });
         for(var a = 0; a<topten[0].length; a++) {
-            $("#poppics").append("<h1>"+topten[0][a]+"</h1>")
+            $("#poppics").append("<h2>"+topten[0][a]+"</h2>")
             for(var b = 0; b<pictures.length; b++) {
-                if(pictures[b][1].indexOf(topten[0][a]) != -1 && !$("#poppics").find("[src='"+pictures[b][0]+"']")[0]) $("#poppics").append('<br><img src="'+pictures[b][0]+'"">');
+                if(pictures[b][1].indexOf(topten[0][a]) != -1) $("#poppics").append('<div class="square" style="display:inline-block;background: url('+pictures[b][0]+');background-size:cover;width: 25%"">');
+                $(".square").css('height', $(".square").width())
             }
         }
+        $(".square").css('height', $(".square").width())
         array_elements = [].concat.apply([], data.recurring);
         ae = data;
         array_elements.sort();
@@ -134,6 +137,14 @@
         recurse = recurse.sort(sortFunction).reverse();
         recurse = _.unzip(recurse);
         recurring = recurse[0].slice(0, 10)
+        topten[0] = recurse[0].slice(0, 10)
+        for(var a = 0; a<topten[0].length; a++) {
+            $("#recpics").append("<h2>"+topten[0][a]+"</h2>")
+            for(var b = 0; b<pictures.length; b++) {
+                if(pictures[b][1].indexOf(topten[0][a]) != -1) $("#recpics").append('<div class="square" style="display:inline-block;background: url('+pictures[b][0]+');background-size:cover;width: 25%"">');
+                $(".square").css('height', $(".square").width())
+            }
+        }
         var data = {
             labels: recurring,
             datasets: [{
