@@ -133,7 +133,6 @@ def tags():
         if index < current_index:
             tag = reverse_tag_indices[index]
             top_ten_tags.append([tag, importance])
-
     return make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags, 'pictures': pictures}), 200)
 
 @app.route('/process-image', methods=['POST'])
