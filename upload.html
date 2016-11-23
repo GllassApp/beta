@@ -5,9 +5,6 @@
     <title>Gllass · Home</title>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-    <script type="text/javascript">
-    new WOW().init();
-    </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
@@ -21,26 +18,28 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 </head>
 
-<body>
+<body onunload="unload()">
     <ul class="tabs black">
         <li class="tab col s3"><a href="#test1" class="white-text">Popular</a></li>
         <li class="tab col s3"><a class="white-text" href="#test2">Common</a></li>
         <li class="tab col s3"><a href="#test3" class="white-text">Predictor</a></li>
     </ul>
-    <div id="test1" class="col s12">
+    <div id="test1" class="col s12" align="center">
         <canvas id="popular"></canvas>
-        <div class="row" id="poppics"></div>
+        <h5>These are the elements of your pictures that generate the most attention and get you the most likes</h5>
+        <div class="row" id="poppics" align="left"></div>
     </div>
-    <div id="test2" class="col s12">
+    <div id="test2" class="col s12" align="center">
         <canvas id="recurrent"></canvas>
-        <div class="row" id="recpics"></div>
+        <h5>These are the elements of your pictures that are the most common</h5>
+        <div class="row" id="recpics" align="left"></div>
     </div>
-    <div id="test3" class="col s12">
+    <div id="test3" class="col s12" align="center">
         <form id="upload-file" method="post" enctype="multipart/form-data">
             <h3 class="fonttest" font="Regular">Upload a picture here to predict how many likes it will get!</h3>
             <fieldset>
                 <label for="file">Select a file</label>
-                <input name="image" type="file">
+                <input name="image" class="" type="file" value="">
             </fieldset>
             <fieldset>
                 <button class="btn waves-effect waves-light black" name="action" id="upload-file-btn" onclick="alert('Predicting');predict()" type="button">Submit
@@ -59,6 +58,7 @@
     $(document).ready(function() {
         $('ul.tabs').tabs();
     });
+
     function sortFunction(a, b) {
         if (a[1] === b[1]) {
             return 0;
@@ -66,10 +66,35 @@
             return (a[1] < b[1]) ? -1 : 1;
         }
     }
+
+    function unload() {
+        window.location = "index.html"
+    }
+
     $(".fonttest").click(function() {
         $(this).css('font-family', $(this).attr('font'));
     });
+    wow = new WOW();
+    wow.init();
     $(".fonttest").click();
+
+    function isElementInViewport(el) {
+
+        //special bonus for those using jQuery
+        if (typeof jQuery === "function" && el instanceof jQuery) {
+            el = el[0];
+        }
+
+        var rect = el.getBoundingClientRect();
+
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+        );
+    }
+
     $.getJSON('http://53f6a570.ngrok.io/tags', function(data) {
         console.log(data)
         bcolors = [];
@@ -96,10 +121,11 @@
             type: 'bar',
             data: topdata
         });
-        for(var a = 0; a<topten[0].length; a++) {
-            $("#poppics").append("<h2>"+topten[0][a]+"</h2>")
-            for(var b = 0; b<pictures.length; b++) {
-                if(pictures[b][1].indexOf(topten[0][a]) != -1) $("#poppics").append('<div class="square" style="display:inline-block;background: url('+pictures[b][0]+');background-size:cover;width: 25%"">');
+        for (var a = 0; a < topten[0].length; a++) {
+            $("#poppics").append("<h2>" + topten[0][a] + "</h2>")
+            for (var b = 0; b < pictures.length; b++) {
+                if (pictures[b][1].indexOf(topten[0][a]) != -1) $("#poppics").append('<div id="' + a.toString() + b.toString() + '" class="square" style="display:inline-block;background: url(' + pictures[b][0] + ');background-size:cover;width: 25%"">');
+                wow.sync();
                 $(".square").css('height', $(".square").width())
             }
         }
@@ -138,10 +164,10 @@
         recurse = _.unzip(recurse);
         recurring = recurse[0].slice(0, 10)
         topten[0] = recurse[0].slice(0, 10)
-        for(var a = 0; a<topten[0].length; a++) {
-            $("#recpics").append("<h2>"+topten[0][a]+"</h2>")
-            for(var b = 0; b<pictures.length; b++) {
-                if(pictures[b][1].indexOf(topten[0][a]) != -1) $("#recpics").append('<div class="square" style="display:inline-block;background: url('+pictures[b][0]+');background-size:cover;width: 25%"">');
+        for (var a = 0; a < topten[0].length; a++) {
+            $("#recpics").append("<h2>" + topten[0][a] + "</h2>")
+            for (var b = 0; b < pictures.length; b++) {
+                if (pictures[b][1].indexOf(topten[0][a]) != -1) $("#recpics").append('<div class="square" style="display:inline-block;background: url(' + pictures[b][0] + ');background-size:cover;width: 25%"">');
                 $(".square").css('height', $(".square").width())
             }
         }
@@ -164,6 +190,25 @@
         console.log(recurrent)
     });
 
+    function elementInViewport(el) {
+        var top = el.offsetTop;
+        var left = el.offsetLeft;
+        var width = el.offsetWidth;
+        var height = el.offsetHeight;
+
+        while (el.offsetParent) {
+            el = el.offsetParent;
+            top += el.offsetTop;
+            left += el.offsetLeft;
+        }
+
+        return (
+            top >= window.pageYOffset &&
+            left >= window.pageXOffset &&
+            (top + height) <= (window.pageYOffset + window.innerHeight) &&
+            (left + width) <= (window.pageXOffset + window.innerWidth)
+        );
+    }
 
     function predict() {
         /*var date = $('#datepicker').datepicker('getDate');
