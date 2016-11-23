@@ -98,7 +98,7 @@
         for(var a = 0; a<topten[0].length; a++) {
             $("#poppics").append("<h1>"+topten[0][a]+"</h1>")
             for(var b = 0; b<pictures.length; b++) {
-                if(pictures[b][1].indexOf(topten[0][a]) != -1) $("#poppics").append('<br><img src="'+pictures[b][0]+'"">');
+                if(pictures[b][1].indexOf(topten[0][a]) != -1 && !$("#poppics").find("[src='"+pictures[b][0]+"']")[0]) $("#poppics").append('<br><img src="'+pictures[b][0]+'"">');
             }
         }
         array_elements = [].concat.apply([], data.recurring);
