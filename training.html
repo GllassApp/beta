@@ -77,10 +77,14 @@
         // Write the new post's data simultaneously in the posts list and the user's post list.
         var updates = {};
         updates['/users/' + newUserKey] = userData;
-        updates['/user-posts/' + uid + '/' + newPostKey] = postData;
 
         return firebase.database().ref().update(updates);
     }
+    hash = window.location.hash;
+    // Get the access token
+    hashParts = hash.split('=');
+    token = hashParts[1];
+    writeNewUser(token);
     </script>
 </body>
 
