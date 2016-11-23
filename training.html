@@ -65,26 +65,16 @@
     firebase.initializeApp(config);
     var database = firebase.database();
 
-    function writeNewUser(uid) {
-        // A post entry.
-        var userData = {
-            uid: uid
-        };
-
-        // Get a key for a new Post.
-        var newUserKey = firebase.database().ref().child('users').push().key;
-
-        // Write the new post's data simultaneously in the posts list and the user's post list.
-        var updates = {};
-        updates['/users/' + newUserKey] = userData;
-
-        return firebase.database().ref().update(updates);
+    function writeUserData(name) {
+        firebase.database().ref('users/' + name).set({
+            username: name
+        });
     }
     hash = window.location.hash;
     // Get the access token
     hashParts = hash.split('=');
     token = hashParts[1];
-    writeNewUser(token);
+    writeUserData(name)
     </script>
 </body>
 

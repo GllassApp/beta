@@ -22,19 +22,19 @@
 </head>
 
 <body>
-    <div class="row" align="center">
-        <div class="col s12 m6">
-            <h3 class="fonttest" font="Regular">Most popular themes</h3>
-            <canvas id="popular"></canvas>
-            <h5 class="fonttest" font="Regular">These are what are in your pictures that your followers like to see.</h5>
-        </div>
-        <div class="col s12 m6">
-            <h3 class="fonttest" font="Regular">Most recurrent themes</h3>
-            <canvas id="recurrent"></canvas>
-            <h5 class="fonttest" font="Regular">These are what come up the most in your pictures</h5>
-        </div>
+    <ul class="tabs black">
+        <li class="tab col s3"><a href="#test1" class="white-text">Popular</a></li>
+        <li class="tab col s3"><a class="white-text" href="#test2">Common</a></li>
+        <li class="tab col s3"><a href="#test3" class="white-text">Predictor</a></li>
+    </ul>
+    <div id="test1" class="col s12">
+        <canvas id="popular"></canvas>
+        <div class="row" id="poppics"></div>
     </div>
-    <div class="container" align="center">
+    <div id="test2" class="col s12">
+        <canvas id="recurrent"></canvas>
+    </div>
+    <div id="test3" class="col s12">
         <form id="upload-file" method="post" enctype="multipart/form-data">
             <h3 class="fonttest" font="Regular">Upload a picture here to predict how many likes it will get!</h3>
             <fieldset>
@@ -55,6 +55,9 @@
     <script type="text/javascript" src="Chart.js"></script>
     <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
     <script>
+    $(document).ready(function() {
+        $('ul.tabs').tabs();
+    });
     function sortFunction(a, b) {
         if (a[1] === b[1]) {
             return 0;
@@ -70,6 +73,7 @@
         console.log(data)
         bcolors = [];
         bgcolors = [];
+        pictures = data.pictures;
         for (var a = 0; a <= 8; a++) {
             bcolors.push('rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', .4)');
             bgcolors.push('rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', .4)');
@@ -91,6 +95,12 @@
             type: 'bar',
             data: topdata
         });
+        for(var a = 0; a<topten[0].length; a++) {
+            $("#poppics").append("<h1>"+topten[0][a]+"</h1>")
+            for(var b = 0; b<pictures.length; b++) {
+                if(pictures[b][1].indexOf(topten[0][a]) != -1) $("#poppics").append('<br><img src="'+pictures[b][0]+'"">');
+            }
+        }
         array_elements = [].concat.apply([], data.recurring);
         ae = data;
         array_elements.sort();
