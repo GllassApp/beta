@@ -9,7 +9,6 @@ from instagram.client import InstagramAPI
 import requests
 import datetime
 from collections import Counter
-import pickle
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -22,17 +21,24 @@ os.environ['CLARIFAI_APP_SECRET'] = CLARIFAI_APP_SECRET
 
 clarifai_api = ClarifaiApi()
 
+model = None
+recurring = []
+tag_indices = {}
+reverse_tag_indices = []
+current_index = 0
+pictures = []
+
 # Convert image to vector
 def image_vector(img_file):
     img_data = clarifai_api.tag_images(img_file)
     tags = img_data['results'][0]['result']['tag']['classes']
     weights = img_data['results'][0]['result']['tag']['probs']
 
-    vector = [0] * session['current_index']
+    vector = [0] * current_index
 
     for i in range(len(tags)):
-        if tags[i] in session['tag_indices']:
-            vector[session['tag_indices'][tags[i]]] = weights[i]
+        if tags[i] in tag_indices:
+            vector[tag_indices[tags[i]]] = weights[i]
 
     return vector
 
@@ -44,14 +50,8 @@ def home():
 def upload():
     return render_template('upload.html')
 
-@app.route('/register-account', methods=['GET', 'POST'])
+@app.route('/register-account')
 def register_account():
-    session['recurring'] = []
-    session['tag_indices'] = {}
-    session['reverse_tag_indices'] = []
-    session['current_index'] = 0
-    session['pictures'] = []
-
     access_token = request.json['token']
     user_id = request.json['user_id']
 
@@ -71,33 +71,39 @@ def register_account():
     time_of_day = []
     weights = []
 
+    global recurring
+    global pictures
     # Convert all images to vectors
     for media in recent_media:
         img_data = clarifai_api.tag_image_urls(media.images['standard_resolution'].url)
         tags.append(img_data['results'][0]['result']['tag']['classes'])
         weights.append(img_data['results'][0]['result']['tag']['probs'])
-        session['recurring'].append(img_data['results'][0]['result']['tag']['classes'])
+        recurring.append(img_data['results'][0]['result']['tag']['classes'])
         date = int(media.created_time.strftime("%s")) * 1000
         dates.append(date)
         time_of_day.append(media.created_time.hour)
         num_likes.append(media.like_count)
-        session['pictures'].append([media.images['standard_resolution'].url, img_data['results'][0]['result']['tag']['classes']])
+        pictures.append([media.images['standard_resolution'].url, img_data['results'][0]['result']['tag']['classes']])
+    # Dictionary to store indices of tags
+    global tag_indices
+    # Iterator for indices
+    global current_index
 
     for vector in tags:
         for tag in vector:
-            if tag not in session['tag_indices']:
-                session['tag_indices'][tag] = session['current_index']
-                session['reverse_tag_indices'].append(tag)
-                session['current_index'] += 1
+            if tag not in tag_indices:
+                tag_indices[tag] = current_index
+                reverse_tag_indices.append(tag)
+                current_index += 1
 
     data = []
 
     # Generate vectors for each image by marking each tag with weight
     for i in range(len(tags)):
-        vector = [0] * session['current_index']
+        vector = [0] * current_index
 
         for j in range(len(tags[i])):
-            vector[session['tag_indices'][tags[i][j]]] = weights[i][j]
+            vector[tag_indices[tags[i][j]]] = weights[i][j]
 
         # Append extra variables and number of likes
         vector.append(dates[i])
@@ -106,35 +112,35 @@ def register_account():
 
         data.append(vector)
 
-    # Store model in session variable as serialized string
-    predictor = LikePredictor(data)
-    session['model'] = pickle.dumps(predictor)
-    return 'Done'
-
-@app.route('/tags')
-def tags():
+    global model
+    model = LikePredictor(data)
+    global reverse_tag_indices
+    global current_index
     # Compute most important tags in user's pictures
-    predictor = pickle.loads(session['model'])
-    important_tags = dict(enumerate(predictor.regressor.feature_importances_))
+    important_tags = dict(enumerate(model.regressor.feature_importances_))
     sorted_tags = Counter(important_tags)
     top_ten_tags = []
 
     for index, importance in sorted_tags.most_common(10):
         # Ensure feature is an image tag
-        if index < session['current_index']:
-            tag = session['reverse_tag_indices'][index]
+        if index < current_index:
+            tag = reverse_tag_indices[index]
             top_ten_tags.append([tag, importance])
-    return make_response(json.dumps({'recurring': session['recurring'], 'topten': top_ten_tags, 'pictures': session['pictures']}), 200)
+
+    return make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags, 'pictures': pictures}), 200)
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
     vector = image_vector(request.files['image'])
 
-    predictor = pickle.loads(session['model'])
-    data = {'prediction': predictor.predict(vector)}
+    global model
+    global current_index
+    global tag_indices
+
+    data = {'prediction': model.predict(vector)}
     response = make_response(json.dumps(data), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
