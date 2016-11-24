@@ -9,6 +9,7 @@ from instagram.client import InstagramAPI
 import requests
 import datetime
 from collections import Counter
+import pickle
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -45,7 +46,6 @@ def upload():
 
 @app.route('/register-account', methods=['GET', 'POST'])
 def register_account():
-    session['model'] = None
     session['recurring'] = []
     session['tag_indices'] = {}
     session['reverse_tag_indices'] = []
@@ -106,13 +106,16 @@ def register_account():
 
         data.append(vector)
 
-    session['model'] = LikePredictor(data)
+    # Store model in session variable as serialized string
+    predictor = LikePredictor(data)
+    session['model'] = pickle.dumps(predictor)
     return 'Done'
 
 @app.route('/tags')
 def tags():
     # Compute most important tags in user's pictures
-    important_tags = dict(enumerate(session['model'].regressor.feature_importances_))
+    predictor = pickle.loads(session['model'])
+    important_tags = dict(enumerate(predictor.regressor.feature_importances_))
     sorted_tags = Counter(important_tags)
     top_ten_tags = []
 
@@ -127,7 +130,8 @@ def tags():
 def process_image():
     vector = image_vector(request.files['image'])
 
-    data = {'prediction': session['model'].predict(vector)}
+    predictor = pickle.loads(session['model'])
+    data = {'prediction': predictor.predict(vector)}
     response = make_response(json.dumps(data), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
