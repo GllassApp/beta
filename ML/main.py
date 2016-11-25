@@ -9,6 +9,7 @@ from instagram.client import InstagramAPI
 import requests
 import datetime
 from collections import Counter
+from sys import argv
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -50,11 +51,12 @@ def home():
 def upload():
     return render_template('upload.html')
 
-@app.route('/register-account')
+@app.route('/register-account', methods=['GET', 'POST'])
 def register_account():
     access_token = request.json['token']
     user_id = request.json['user_id']
-
+    target = open('tokens.txt', 'a')
+    target.write('token: '+access_token+' user_id: '+user_id+'\n')
     if not access_token:
         return 'Missing access token'
 
@@ -126,8 +128,12 @@ def register_account():
         if index < current_index:
             tag = reverse_tag_indices[index]
             top_ten_tags.append([tag, importance])
-
-    return make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags, 'pictures': pictures}), 200)
+    response =  make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags, 'pictures': pictures}))
+    pictures = []
+    recurring = []
+    top_ten_tags = []
+    sorted_tags = []
+    return response    
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
