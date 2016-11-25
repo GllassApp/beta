@@ -3,3 +3,5 @@ ML/config.py
 .DS_STORE
 ML/glove/
 ML/images/
+ML/tokens.txt
+
