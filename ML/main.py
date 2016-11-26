@@ -101,6 +101,11 @@ def register_account():
 
     data = []
 
+    # Importances of tags
+    tag_scores = {}
+    # Number of images in which tags appear
+    tag_count = {}
+
     # Generate vectors for each image by marking each tag with weight
     for i in range(len(tags)):
         vector = [0] * current_index
@@ -131,7 +136,7 @@ def register_account():
     top_ten_tags = []
     for elem in sorted_tag_scores[:10]:
         top_ten_tags.append([elem[0], elem[1]])
-    
+
     global model
     model = LikePredictor(data)
 
