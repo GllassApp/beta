@@ -114,8 +114,12 @@ def register_account():
         for j in range(len(tags[i])):
             vector[tag_indices[tags[i][j]]] = weights[i][j]
 
-            tag_scores[tags[i][j]] += weights[i][j] * num_likes[i]
-            tag_count[tags[i][j]] += 1
+            if tags[i][j] in tag_scores:
+                tag_scores[tags[i][j]] += weights[i][j] * num_likes[i]
+                tag_count[tags[i][j]] += 1
+            else:
+                tag_scores[tags[i][j]] = weights[i][j] * num_likes[i]
+                tag_count[tags[i][j]] = 1
 
         # Append extra variables and number of likes
         vector.append(dates[i])
