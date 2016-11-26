@@ -130,7 +130,8 @@ def register_account():
 
     # Divide tag scores by number of pictures they appear in
     for key, value in tag_scores.iteritems():
-        tag_scores[key] /= tag_count[key]
+        # Maximize score if tag is in 5 pictures
+        tag_scores[key] /= 5 + abs(5 - tag_count[key])
     sorted_tag_scores = sorted(tag_scores.items(), key=operator.itemgetter(1), reverse=True)
 
     # Top ten most important tags
