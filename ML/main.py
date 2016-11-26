@@ -131,7 +131,7 @@ def register_account():
 
     # Top ten most important tags
     top_ten_tags = []
-    for elem in sorted_tag_scores:
+    for elem in sorted_tag_scores[:10]:
         top_ten_tags.append([elem[0], elem[1]])
 
     global model
