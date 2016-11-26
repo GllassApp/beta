@@ -10,6 +10,7 @@ import requests
 import datetime
 from collections import Counter
 from sys import argv
+import operator
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -100,12 +101,21 @@ def register_account():
 
     data = []
 
+    # Relative importances of tags in pictures
+    tag_scores = {}
+
+    # Number of images that tags appear in
+    tag_count = {}
+
     # Generate vectors for each image by marking each tag with weight
     for i in range(len(tags)):
         vector = [0] * current_index
 
         for j in range(len(tags[i])):
             vector[tag_indices[tags[i][j]]] = weights[i][j]
+
+            tag_scores[tags[i][j]] += weights[i][j] * num_likes[i]
+            tag_count[tags[i][j]] += 1
 
         # Append extra variables and number of likes
         vector.append(dates[i])
@@ -114,26 +124,25 @@ def register_account():
 
         data.append(vector)
 
+    # Divide tag scores by number of pictures they appear in
+    for key, value in tag_scores.iteritems():
+        tag_scores[key] /= tag_count[key]
+    sorted_tag_scores = sorted(tag_scores.items(), key=operator.itemgetter(1), reverse=True)
+
+    # Top ten most important tags
+    top_ten_tags = []
+    for elem in sorted_tag_scores:
+        top_ten_tags.append([elem[0], elem[1]])
+
     global model
     model = LikePredictor(data)
-    global reverse_tag_indices
-    global current_index
-    # Compute most important tags in user's pictures
-    important_tags = dict(enumerate(model.regressor.feature_importances_))
-    sorted_tags = Counter(important_tags)
-    top_ten_tags = []
 
-    for index, importance in sorted_tags.most_common(10):
-        # Ensure feature is an image tag
-        if index < current_index:
-            tag = reverse_tag_indices[index]
-            top_ten_tags.append([tag, importance])
     response =  make_response(json.dumps({'recurring': recurring, 'topten': top_ten_tags, 'pictures': pictures}))
     pictures = []
     recurring = []
     top_ten_tags = []
     sorted_tags = []
-    return response    
+    return response
 
 @app.route('/process-image', methods=['POST'])
 def process_image():
