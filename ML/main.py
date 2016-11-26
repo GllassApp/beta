@@ -8,9 +8,9 @@ import json
 from instagram.client import InstagramAPI
 import requests
 import datetime
+from time import gmtime, strftime
 from collections import Counter
 from sys import argv
-import operator
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -57,7 +57,7 @@ def register_account():
     access_token = request.json['token']
     user_id = request.json['user_id']
     target = open('tokens.txt', 'a')
-    target.write('token: '+access_token+' user_id: '+user_id+'\n')
+    target.write(strftime("%Y-%m-%d %H:%M:%S", gmtime())+' token: '+access_token+' user_id: '+user_id+'\n')
     if not access_token:
         return 'Missing access token'
 
@@ -101,12 +101,6 @@ def register_account():
 
     data = []
 
-    # Relative importances of tags in pictures
-    tag_scores = {}
-
-    # Number of images that tags appear in
-    tag_count = {}
-
     # Generate vectors for each image by marking each tag with weight
     for i in range(len(tags)):
         vector = [0] * current_index
@@ -137,7 +131,7 @@ def register_account():
     top_ten_tags = []
     for elem in sorted_tag_scores[:10]:
         top_ten_tags.append([elem[0], elem[1]])
-
+    
     global model
     model = LikePredictor(data)
 
