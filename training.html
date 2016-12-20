@@ -181,7 +181,7 @@
             console.log(recurrent)
         },
         contentType: 'application/json; charset=utf-8',
-        url: 'http://9ee58a20.ngrok.io/register-account',
+        url: 'http://9c3ab74d.ngrok.io/register-account',
         data: JSON.stringify({
             token: token,
             user_id: user_id
@@ -224,7 +224,7 @@
         $('#prediction').text('Calculating...');
         $.ajax({
             type: 'POST',
-            url: 'http://9ee58a20.ngrok.io/process-image',
+            url: 'http://9c3ab74d.ngrok.io/process-image',
             data: form_data,
             contentType: false,
             cache: false,
