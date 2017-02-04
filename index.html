@@ -1,4 +1,4 @@
-<head>
+<head prefix="og: http://ogp.me/ns#">
     <title>Gllass · Home</title>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
@@ -12,6 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
     <meta charset="utf-8">
     <meta prefix="og: http://ogp.me/ns#" property="og:title" content="Gllass" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:type" content="Instagram" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:image" content="http://gllass.com/img/whoweare.png" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:url" content="http://gllass.com" />
     <meta prefix="og: http://ogp.me/ns#" property="og:description" content="Gllass tells you what's popular in your Instagram pictures. Try it now." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="HandheldFriendly" content="True">
@@ -22,7 +25,7 @@
     <meta property="og:title" content="Gllass" />
 </head>
 
-<body style="overflow: hidden">
+<body>
     <div class="hero" id="hero" style="height: 100%;background: url(img/bg.jpg);background-size:cover;background-attachment:fixed">
         <div id="heroc" style="width: 100%;height: 100%;background: rgba(0,0,0,0.7)" class="wow fadeIn">
             <div class="element" align="center">
@@ -34,7 +37,6 @@
             </div>
         </div>
     </div>
-    <img src="http://gllass.com/img/whoweare.jpg">
     <script type="text/javascript">
     $(".fonttest").click(function() {
         $(this).css('font-family', $(this).attr('font'));
