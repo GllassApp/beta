@@ -182,7 +182,7 @@
             console.log(recurrent)
         },
         contentType: 'application/json; charset=utf-8',
-        url: '/register-account',
+        url: 'http://gllass.herokuapp.com/register-account',
         data: JSON.stringify({
             token: token,
             user_id: user_id
@@ -226,7 +226,7 @@
         $('#prediction').text('Calculating...');
         $.ajax({
             type: 'POST',
-            url: '/process-image',
+            url: 'http://gllass.herokuapp.com/process-image',
             data: form_data,
             contentType: false,
             cache: false,
