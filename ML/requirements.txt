@@ -1,6 +1,26 @@
+# ----------------------
+# Flask
+# ----------------------
+flask
+
+
+# ----------------------
+# Testing
+# ----------------------
+mock
+
+
+# ----------------------
+# Production Server
+# ----------------------
+gunicorn
+gevent
+
 Flask
 flask-cors
 numpy
 scikit-learn
+scipy
 git+git://github.com/Clarifai/clarifai-python.git
-python-instagram
+git+git://github.com/andykamath/python-instagram.git
+pymongo

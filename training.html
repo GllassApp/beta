@@ -57,6 +57,7 @@
                         <label for="file">Select a file</label>
                         <input name="image" class="" type="file" value="">
                     </fieldset>
+                    <input type="text" name="userid" id="userid" style="visibility: hidden">
                     <fieldset>
                         <button class="btn waves-effect waves-light black" name="action" id="upload-file-btn" onclick="alert('Predicting');predict()" type="button">Submit
                             <i class="fa fa-telegram"></i>
@@ -70,7 +71,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-    <script type="text/javascript" src="Chart.js"></script>
+    <script type="text/javascript" src="/Chart.js"></script>
     <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
     <script type="text/javascript">
     hash = window.location.hash;
@@ -181,7 +182,7 @@
             console.log(recurrent)
         },
         contentType: 'application/json; charset=utf-8',
-        url: 'http://69ef1365.ngrok.io/register-account',
+        url: '/register-account',
         data: JSON.stringify({
             token: token,
             user_id: user_id
@@ -219,19 +220,20 @@
         if (date === null) {
             date = new Date();
         }*/
-
+        $("#userid").val(user_id)
         var form_data = new FormData($('#upload-file')[0]);
+        form_data.append($("#userid").val(), 'user_id')
         $('#prediction').text('Calculating...');
         $.ajax({
             type: 'POST',
-            url: 'http://69ef1365.ngrok.io/process-image',
+            url: '/process-image',
             data: form_data,
             contentType: false,
             cache: false,
             processData: false,
             async: false,
             success: function(data) {
-                $('#prediction').text('Predicted Number of Likes: ' + Math.floor(data.prediction))
+                $('#prediction').text('Predicted number of likes: '+data.prediction);
             },
         });
     }
