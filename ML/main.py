@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from ml import *
 import os
 from config import *
-from clarifai.client import ClarifaiApi
+import classify_image
 import json
 from instagram.client import InstagramAPI
 import requests
@@ -20,12 +20,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.secret_key = os.urandom(24).encode('hex')
 CORS(app)
 
-# Set Clarifai API credentials
-os.environ['CLARIFAI_APP_ID'] = CLARIFAI_APP_ID
-os.environ['CLARIFAI_APP_SECRET'] = CLARIFAI_APP_SECRET
-
-clarifai_api = ClarifaiApi()
-
 model = None
 recurring = []
 tag_indices = {}
@@ -35,7 +29,8 @@ pictures = []
 
 # Convert image to vector
 def image_vector(img_file):
-    img_data = clarifai_api.tag_images(img_file)
+    img_data = classify_image.run_inference_on_image(img_file)
+    print(img_data)
     tags = img_data['results'][0]['result']['tag']['classes']
     weights = img_data['results'][0]['result']['tag']['probs']
 
@@ -82,7 +77,7 @@ def register_account():
         global pictures
         # Convert all images to vectors
         for media in recent_media:
-            img_data = clarifai_api.tag_image_urls(media.images['standard_resolution'].url)
+            img_data = classify_image.run_inference_on_image(media.images['standard_resolution'].url)
             tags.append(img_data['results'][0]['result']['tag']['classes'])
             weights.append(img_data['results'][0]['result']['tag']['probs'])
             recurring.append(img_data['results'][0]['result']['tag']['classes'])
@@ -158,7 +153,7 @@ def register_account():
 def process_image():
     vector = image_vector(request.files['image'])
     user_id = request.form['userid']
-    print user_id
+    print(user_id)
     user = users.find_one({"user_id": user_id})
     model = LikePredictor(user['data'])
 
